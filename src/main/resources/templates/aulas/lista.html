@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <title>Aulas</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <h2><i class="bi bi-calendar-event me-2"></i>Planeamento de Aulas</h2>
+        <a th:href="@{/aulas/nova}" class="btn btn-warning">
+            <i class="bi bi-calendar-plus me-1"></i>Nova Aula
+        </a>
+    </div>
+
+    <div th:if="${mensagem}" class="alert" th:classappend="'alert-' + ${tipoMensagem}" role="alert">
+        <span th:text="${mensagem}"></span>
+    </div>
+
+    <div class="card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Data/Hora Início</th>
+                            <th>Data/Hora Fim</th>
+                            <th>Tema</th>
+                            <th>Turma</th>
+                            <th>Professor</th>
+                            <th>Sala</th>
+                            <th>Estado</th>
+                            <th class="text-end">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="aula : ${aulas}">
+                            <td th:text="${aula.dataHoraInicio != null ? #temporals.format(aula.dataHoraInicio, 'dd/MM/yyyy HH:mm') : '-'}"></td>
+                            <td th:text="${aula.dataHoraFim != null ? #temporals.format(aula.dataHoraFim, 'dd/MM/yyyy HH:mm') : '-'}"></td>
+                            <td>
+                                <a th:href="@{/aulas/ver/{id}(id=${aula.id})}" class="text-decoration-none fw-semibold"
+                                   th:text="${aula.tema}"></a>
+                            </td>
+                            <td>
+                                <a th:if="${aula.turma}" th:href="@{/turmas/ver/{id}(id=${aula.turma.id})}"
+                                   th:text="${aula.turma.nome}" class="badge bg-info text-decoration-none"></a>
+                            </td>
+                            <td th:text="${aula.professor ?: '-'}"></td>
+                            <td th:text="${aula.sala ?: '-'}"></td>
+                            <td>
+                                <span class="badge badge-estado"
+                                      th:classappend="${aula.estado.name() == 'PLANEADA' ? 'bg-info' :
+                                                       (aula.estado.name() == 'EM_CURSO' ? 'bg-primary' :
+                                                       (aula.estado.name() == 'CONCLUIDA' ? 'bg-success' : 'bg-danger'))}"
+                                      th:text="${aula.estado}"></span>
+                            </td>
+                            <td class="text-end">
+                                <a th:href="@{/aulas/ver/{id}(id=${aula.id})}" class="btn btn-sm btn-outline-info btn-action" title="Ver">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a th:href="@{/aulas/editar/{id}(id=${aula.id})}" class="btn btn-sm btn-outline-warning btn-action" title="Editar">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a th:href="@{/aulas/eliminar/{id}(id=${aula.id})}" class="btn btn-sm btn-outline-danger btn-action"
+                                   title="Eliminar" onclick="return confirm('Tem a certeza que deseja eliminar esta aula?')">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(aulas)}">
+                            <td colspan="8" class="text-center text-muted py-4">
+                                <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                                Nenhuma aula encontrada
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

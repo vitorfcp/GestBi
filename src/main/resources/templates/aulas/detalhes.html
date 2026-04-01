@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <title>Detalhes da Aula</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <h2><i class="bi bi-calendar-event me-2"></i>Detalhes da Aula</h2>
+        <div class="d-flex gap-2">
+            <a th:href="@{/aulas/editar/{id}(id=${aula.id})}" class="btn btn-warning">
+                <i class="bi bi-pencil me-1"></i>Editar
+            </a>
+            <a th:href="@{/aulas}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-1"></i>Voltar
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-8">
+                    <h4 th:text="${aula.tema}" class="fw-bold"></h4>
+                    <span class="badge badge-estado"
+                          th:classappend="${aula.estado.name() == 'PLANEADA' ? 'bg-info' :
+                                           (aula.estado.name() == 'EM_CURSO' ? 'bg-primary' :
+                                           (aula.estado.name() == 'CONCLUIDA' ? 'bg-success' : 'bg-danger'))}"
+                          th:text="${aula.estado}"></span>
+                </div>
+                <div class="col-md-4 text-end">
+                    <div th:if="${aula.turma}">
+                        <span class="text-muted small">Turma:</span>
+                        <a th:href="@{/turmas/ver/{id}(id=${aula.turma.id})}"
+                           th:text="${aula.turma.nome}" class="badge bg-info text-decoration-none fs-6"></a>
+                    </div>
+                </div>
+                <div class="col-12"><hr></div>
+                <div class="col-md-3">
+                    <div class="info-label">Data/Hora Início</div>
+                    <div class="info-value" th:text="${aula.dataHoraInicio != null ? #temporals.format(aula.dataHoraInicio, 'dd/MM/yyyy HH:mm') : '-'}"></div>
+                </div>
+                <div class="col-md-3">
+                    <div class="info-label">Data/Hora Fim</div>
+                    <div class="info-value" th:text="${aula.dataHoraFim != null ? #temporals.format(aula.dataHoraFim, 'dd/MM/yyyy HH:mm') : '-'}"></div>
+                </div>
+                <div class="col-md-3">
+                    <div class="info-label">Professor</div>
+                    <div class="info-value" th:text="${aula.professor ?: '-'}"></div>
+                </div>
+                <div class="col-md-3">
+                    <div class="info-label">Sala</div>
+                    <div class="info-value" th:text="${aula.sala ?: '-'}"></div>
+                </div>
+                <div class="col-12" th:if="${aula.descricao}">
+                    <hr>
+                    <div class="info-label">Descrição</div>
+                    <div class="info-value" th:text="${aula.descricao}"></div>
+                </div>
+                <div class="col-md-6" th:if="${aula.conteudoProgramatico}">
+                    <hr>
+                    <div class="info-label">Conteúdo Programático</div>
+                    <div class="info-value" th:text="${aula.conteudoProgramatico}"></div>
+                </div>
+                <div class="col-md-6" th:if="${aula.objetivos}">
+                    <hr>
+                    <div class="info-label">Objetivos</div>
+                    <div class="info-value" th:text="${aula.objetivos}"></div>
+                </div>
+                <div class="col-12" th:if="${aula.recursos}">
+                    <hr>
+                    <div class="info-label">Recursos Necessários</div>
+                    <div class="info-value" th:text="${aula.recursos}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
