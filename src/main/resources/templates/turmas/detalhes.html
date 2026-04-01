@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <title>Detalhes da Turma</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <h2><i class="bi bi-collection me-2"></i>Turma: <span th:text="${turma.nome}"></span></h2>
+        <div class="d-flex gap-2">
+            <a th:href="@{/aulas/nova(turmaId=${turma.id})}" class="btn btn-warning">
+                <i class="bi bi-calendar-plus me-1"></i>Agendar Aula
+            </a>
+            <a th:href="@{/turmas/editar/{id}(id=${turma.id})}" class="btn btn-outline-warning">
+                <i class="bi bi-pencil me-1"></i>Editar
+            </a>
+            <a th:href="@{/turmas}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-1"></i>Voltar
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-info-circle me-2"></i>Informações</h5>
+                    <div class="mb-2">
+                        <span class="badge badge-estado"
+                              th:classappend="${turma.estado.name() == 'ABERTA' ? 'bg-success' :
+                                               (turma.estado.name() == 'EM_CURSO' ? 'bg-primary' :
+                                               (turma.estado.name() == 'FECHADA' ? 'bg-secondary' : 'bg-danger'))}"
+                              th:text="${turma.estado}"></span>
+                    </div>
+                    <p th:if="${turma.descricao}" th:text="${turma.descricao}" class="text-muted"></p>
+                    <div class="small mb-1" th:if="${turma.disciplina}">
+                        <strong>Disciplina:</strong> <span th:text="${turma.disciplina.nome}"></span>
+                    </div>
+                    <div class="small mb-1" th:if="${turma.sala}">
+                        <strong>Sala:</strong> <span th:text="${turma.sala}"></span>
+                    </div>
+                    <div class="small mb-1">
+                        <strong>Início:</strong> <span th:text="${turma.dataInicio != null ? #temporals.format(turma.dataInicio, 'dd/MM/yyyy') : '-'}"></span>
+                    </div>
+                    <div class="small mb-1" th:if="${turma.dataFim}">
+                        <strong>Fim:</strong> <span th:text="${#temporals.format(turma.dataFim, 'dd/MM/yyyy')}"></span>
+                    </div>
+                    <div class="small mb-1">
+                        <strong>Vagas:</strong> <span th:text="${turma.numeroAlunosInscritos}">0</span> / <span th:text="${turma.maxAlunos}">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-people me-2"></i>Alunos Inscritos
+                        <span class="badge bg-primary ms-1" th:text="${#lists.size(alunos)}"></span>
+                    </h5>
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Foto</th>
+                                    <th>N.º Aluno</th>
+                                    <th>Nome</th>
+                                    <th>Email</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="aluno : ${alunos}">
+                                    <td>
+                                        <img th:if="${aluno.fotoUrl}" th:src="${aluno.fotoUrl}" class="foto-aluno-sm" alt="Foto">
+                                        <div th:unless="${aluno.fotoUrl}" class="foto-placeholder-sm"><i class="bi bi-person"></i></div>
+                                    </td>
+                                    <td th:text="${aluno.numeroAluno}"></td>
+                                    <td>
+                                        <a th:href="@{/alunos/ver/{id}(id=${aluno.id})}" class="text-decoration-none"
+                                           th:text="${aluno.nome}"></a>
+                                    </td>
+                                    <td th:text="${aluno.email}"></td>
+                                    <td>
+                                        <span class="badge badge-estado"
+                                              th:classappend="${aluno.estado.name() == 'ATIVO' ? 'bg-success' : 'bg-secondary'}"
+                                              th:text="${aluno.estado}"></span>
+                                    </td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(alunos)}">
+                                    <td colspan="5" class="text-center text-muted py-3">Nenhum aluno inscrito</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-calendar-event me-2"></i>Aulas Planeadas
+                        <span class="badge bg-warning text-dark ms-1" th:text="${#lists.size(aulas)}"></span>
+                    </h5>
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Data/Hora</th>
+                                    <th>Tema</th>
+                                    <th>Professor</th>
+                                    <th>Sala</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="aula : ${aulas}">
+                                    <td th:text="${aula.dataHoraInicio != null ? #temporals.format(aula.dataHoraInicio, 'dd/MM/yyyy HH:mm') : '-'}"></td>
+                                    <td>
+                                        <a th:href="@{/aulas/ver/{id}(id=${aula.id})}" class="text-decoration-none"
+                                           th:text="${aula.tema}"></a>
+                                    </td>
+                                    <td th:text="${aula.professor ?: '-'}"></td>
+                                    <td th:text="${aula.sala ?: '-'}"></td>
+                                    <td>
+                                        <span class="badge badge-estado"
+                                              th:classappend="${aula.estado.name() == 'PLANEADA' ? 'bg-info' :
+                                                               (aula.estado.name() == 'EM_CURSO' ? 'bg-primary' :
+                                                               (aula.estado.name() == 'CONCLUIDA' ? 'bg-success' : 'bg-danger'))}"
+                                              th:text="${aula.estado}"></span>
+                                    </td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(aulas)}">
+                                    <td colspan="5" class="text-center text-muted py-3">Nenhuma aula planeada</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

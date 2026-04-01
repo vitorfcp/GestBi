@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <title th:text="${disciplina.id != null ? 'Editar Disciplina' : 'Nova Disciplina'}">Disciplina</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="page-header">
+        <h2>
+            <i class="bi bi-journal-plus me-2" th:if="${disciplina.id == null}"></i>
+            <i class="bi bi-pencil-square me-2" th:if="${disciplina.id != null}"></i>
+            <span th:text="${disciplina.id != null ? 'Editar Disciplina' : 'Nova Disciplina'}"></span>
+        </h2>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <form th:action="@{/disciplinas/guardar}" th:object="${disciplina}" method="post">
+                <input type="hidden" th:field="*{id}">
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Nome *</label>
+                        <input type="text" class="form-control" th:field="*{nome}"
+                               th:classappend="${#fields.hasErrors('nome')} ? 'is-invalid' : ''">
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Código</label>
+                        <input type="text" class="form-control" th:field="*{codigo}">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Carga Horária (horas)</label>
+                        <input type="number" class="form-control" th:field="*{cargaHoraria}" min="1">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Professor</label>
+                        <input type="text" class="form-control" th:field="*{professor}">
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label fw-semibold">Descrição</label>
+                        <textarea class="form-control" th:field="*{descricao}" rows="3"></textarea>
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex gap-2">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-check-lg me-1"></i>Guardar
+                    </button>
+                    <a th:href="@{/disciplinas}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-1"></i>Voltar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

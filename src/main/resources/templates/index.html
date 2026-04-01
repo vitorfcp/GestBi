@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="page-header">
+        <h2><i class="bi bi-speedometer2 me-2"></i>Painel de Controlo</h2>
+        <p class="text-muted">Visão geral do sistema de gestão</p>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-md-3 col-sm-6">
+            <div class="card dashboard-card alunos">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="text-muted small">Total Alunos</div>
+                        <div class="number text-primary" th:text="${totalAlunos}">0</div>
+                        <div class="text-muted small"><span th:text="${alunosAtivos}">0</span> ativos</div>
+                    </div>
+                    <i class="bi bi-people icon text-primary"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="card dashboard-card turmas">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="text-muted small">Total Turmas</div>
+                        <div class="number text-success" th:text="${totalTurmas}">0</div>
+                        <div class="text-muted small"><span th:text="${turmasAbertas}">0</span> abertas</div>
+                    </div>
+                    <i class="bi bi-collection icon text-success"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="card dashboard-card aulas">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="text-muted small">Total Aulas</div>
+                        <div class="number text-warning" th:text="${totalAulas}">0</div>
+                        <div class="text-muted small"><span th:text="${aulasPlaneadas}">0</span> planeadas</div>
+                    </div>
+                    <i class="bi bi-calendar-event icon text-warning"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="card dashboard-card disciplinas">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="text-muted small">Disciplinas</div>
+                        <div class="number text-danger" th:text="${totalDisciplinas}">0</div>
+                    </div>
+                    <i class="bi bi-book icon text-danger"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-lightning me-2"></i>Ações Rápidas</h5>
+                    <div class="d-grid gap-2">
+                        <a th:href="@{/alunos/novo}" class="btn btn-outline-primary">
+                            <i class="bi bi-person-plus me-2"></i>Novo Aluno
+                        </a>
+                        <a th:href="@{/turmas/nova}" class="btn btn-outline-success">
+                            <i class="bi bi-plus-circle me-2"></i>Nova Turma
+                        </a>
+                        <a th:href="@{/aulas/nova}" class="btn btn-outline-warning">
+                            <i class="bi bi-calendar-plus me-2"></i>Nova Aula
+                        </a>
+                        <a th:href="@{/disciplinas/nova}" class="btn btn-outline-danger">
+                            <i class="bi bi-journal-plus me-2"></i>Nova Disciplina
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-info-circle me-2"></i>Sobre o Sistema</h5>
+                    <p class="text-muted">Este sistema permite a gestão completa de uma sala de aulas, incluindo:</p>
+                    <ul class="text-muted">
+                        <li>Gestão de fichas de alunos com foto</li>
+                        <li>Criação e gestão de turmas</li>
+                        <li>Planeamento e gestão de aulas</li>
+                        <li>Gestão de disciplinas</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
